@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  ci.webapp:
+    image: ci.webapp
+    build:
+      context: ./CI.WebApp
+      dockerfile: Dockerfile
