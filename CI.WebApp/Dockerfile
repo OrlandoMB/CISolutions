@@ -1,6 +1,23 @@
-FROM microsoft/aspnetcore:2.0
-ARG source
+#FROM microsoft/aspnetcore-build:2.0
+#WORKDIR /app
+#COPY . bin/Debug/netcoreapp2.0/publish/*
+
+
+
+
+FROM microsoft/aspnetcore-build:2.0 AS build-env
 WORKDIR /app
-EXPOSE 9001/tcp
-COPY ${source:-obj/Docker/publish} .
-ENTRYPOINT ["dotnet", "CI.WebApp.dll"]
+
+# Copy csproj and restore as distinct layers
+COPY *.csproj ./
+RUN dotnet restore
+
+# Copy everything else and build
+COPY . ./
+RUN dotnet publish -c Release -o out
+
+# Build runtime image
+FROM microsoft/aspnetcore:2.0
+WORKDIR /app
+COPY --from=build-env /app/out .
+ENTRYPOINT ["dotnet","CI.WebApp.dll"]
