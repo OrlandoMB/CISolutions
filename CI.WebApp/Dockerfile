@@ -1,10 +1,3 @@
-#FROM microsoft/aspnetcore-build:2.0
-#WORKDIR /app
-#COPY . bin/Debug/netcoreapp2.0/publish/*
-
-
-
-
 FROM microsoft/aspnetcore-build:2.0 AS build-env
 WORKDIR /app
 
